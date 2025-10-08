@@ -6,23 +6,35 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.Buffer;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        System.out.println("Hello world!");
-        ServerSocket mioserver= new ServerSocket(3000);
-        Socket mioSocket = mioserver.accept();
-        System.out.println("qualcuno si e collegato");
+        System.out.println("Inizio server");
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(mioSocket.getInputStream()));
-        PrintWriter out = new PrintWriter(mioSocket.getOutputStream(), true);
+        try (ServerSocket serverSocket = new ServerSocket(3001)) {
+            System.out.println("Server in ascolto in porta 3001");
 
-        String Sricevuta = in.readLine();
-        String Smaiuscola = Sricevuta.toUpperCase();
-        out.println(Smaiuscola);
+            try (Socket clientSocket = serverSocket.accept();
+                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
 
-        System.out.println(Sricevuta);
-        mioSocket.close();
+                System.out.println("Client connesso.");
+
+                String received;
+
+                while ((received = in.readLine()) != null) {
+                    if (received.equals("!")) {
+                        System.out.println("Il client vuole chiudere la connessione.");
+                        break;
+                    }
+
+                    System.out.println("Ricevuto: " + received);
+                    String uppercased = received.toUpperCase();
+                    out.println(uppercased);
+                }
+
+                System.out.println("Connessine terminata dal client");
+            }
+        }
     }
 }
