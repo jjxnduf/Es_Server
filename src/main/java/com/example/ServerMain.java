@@ -39,20 +39,27 @@ public class ServerMain {
             }
 
             int risultato = 0;
-            if (op == 1) {
-                risultato = num1 + num2;
-            } else if (op == 2) {
-                risultato = num1 - num2;
-            } else if (op == 3) {
-                if (num2 == 0) {
-                    out.println("Errore: divisione per zero");
-                    continue;
-                }
-                risultato = num1 / num2;
-            } else if (op == 4) {
-                risultato = num1 * num2;
-            }
 
+            switch (op) {
+                case 1:
+                    risultato = num1 + num2;
+                    break;
+                case 2:
+                    risultato = num1 - num2;
+                    break;
+                case 3:
+                    if (num2 == 0) {
+                        out.println("Errore: divisione per zero");
+                    }
+                    risultato = num1 / num2;
+                    break;
+                case 4:
+                    risultato = num1 * num2;
+                    break;
+                default:
+                    break;
+            }
+            
             out.println("Risultato: " + risultato);
         }
 
